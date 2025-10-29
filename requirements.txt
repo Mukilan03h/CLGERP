@@ -1,0 +1,6 @@
+﻿django
+djongo
+pymongo
+dnspython
+djangorestframework
+python-dotenv
