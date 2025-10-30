@@ -1,6 +1,13 @@
-﻿django
-djongo
+django
+djongo5
 pymongo
 dnspython
 djangorestframework
 python-dotenv
+djangorestframework-simplejwt
+drf-yasg
+pytest
+pytest-django
+django-cors-headers
+black
+isort
