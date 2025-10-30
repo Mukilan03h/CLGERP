@@ -10,8 +10,62 @@ This is the backend for the College ERP system, built with Django, Django REST F
 *   **Finance Management:** Manage fee structures and payment records.
 *   **Admission Management:** Manage admission applications and merit lists.
 *   **Attendance Management:** Manage attendance records and subjects.
+*   **Course & Curriculum Management:** Manage programs, courses, and syllabi.
 *   **API Documentation:** Swagger UI for API documentation.
 *   **Containerization:** Docker and Docker Compose for easy deployment.
+
+## Project Architecture
+
+The backend is built using a modular architecture, with each core feature separated into its own Django app. This promotes separation of concerns and makes the codebase easier to maintain and scale.
+
+The project uses a standardized API response middleware to ensure that all API responses follow a consistent JSON format.
+
+## Data Models
+
+### Authentication
+
+*   **User:** Stores user information, including username, password, email, and role.
+
+### Student Information
+
+*   **Department:** Stores department information, including name and code.
+*   **Student:** Stores student information, including name, roll number, department, semester, guardian information, and documents.
+
+### Faculty Management
+
+*   **Faculty:** Stores faculty information, including name, department, designation, and subjects.
+*   **LeaveRequest:** Stores leave request information, including faculty, start date, end date, reason, and status.
+
+### Finance Management
+
+*   **FeeStructure:** Stores fee structure information, including department, semester, and amount.
+*   **PaymentRecord:** Stores payment record information, including student, date, mode, amount, and status.
+
+### Admission Management
+
+*   **ApplicationForm:** Stores admission application information, including student information, score, status, and documents.
+*   **MeritList:** Stores merit list information, including department, rank, and student reference.
+
+### Attendance Management
+
+*   **Subject:** Stores subject information, including name, code, and semester.
+*   **Attendance:** Stores attendance information, including date, subject, student, and status.
+
+### Course & Curriculum Management
+
+*   **Program:** Stores program information, including name, code, and duration.
+*   **Course:** Stores course information, including name, code, program, credits, and semester.
+*   **Syllabus:** Stores syllabus information, including course and content.
+
+## User Roles & Permissions
+
+The backend uses a role-based access control system to restrict access to certain API endpoints based on the user's role. The available roles are:
+
+*   **Admin:** Full access to all API endpoints.
+*   **Faculty:** Limited to their subjects and related data.
+*   **Student:** Limited to their own data.
+*   **Accountant:** Limited to finance-related data.
+*   **AdmissionOfficer:** Limited to admission-related data.
 
 ## Getting Started
 
@@ -116,6 +170,40 @@ The API documentation is available at `http://localhost:8000/api/docs/`.
 *   `DELETE /api/attendance/{id}/`: Delete an attendance record by its ID.
 *   `GET /api/attendance/student/{student_id}/`: Get a student's attendance records.
 *   `GET /api/attendance/report/{semester}/`: Get a semester-wise attendance report.
+
+### Course & Curriculum Management
+
+*   `GET /api/academics/programs/`: Get a list of all programs.
+*   `POST /api/academics/programs/`: Create a new program.
+*   `GET /api/academics/programs/{id}/`: Get a program by its ID.
+*   `PATCH /api/academics/programs/{id}/`: Update a program by its ID.
+*   `DELETE /api/academics/programs/{id}/`: Delete a program by its ID.
+*   `GET /api/academics/courses/`: Get a list of all courses.
+*   `POST /api/academics/courses/`: Create a new course.
+*   `GET /api/academics/courses/{id}/`: Get a course by its ID.
+*   `PATCH /api/academics/courses/{id}/`: Update a course by its ID.
+*   `DELETE /api/academics/courses/{id}/`: Delete a course by its ID.
+*   `GET /api/academics/syllabi/`: Get a list of all syllabi.
+*   `POST /api/academics/syllabi/`: Create a new syllabus.
+*   `GET /api/academics/syllabi/{id}/`: Get a syllabus by its ID.
+*   `PATCH /api/academics/syllabi/{id}/`: Update a syllabus by its ID.
+*   `DELETE /api/academics/syllabi/{id}/`: Delete a syllabus by its ID.
+
+## Running the API Endpoints
+
+You can use a tool like `curl` or Postman to interact with the API endpoints.
+
+### Example: Register a new user
+
+```bash
+curl -X POST http://localhost:8000/api/auth/register/ -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpassword", "email": "test@example.com", "first_name": "Test", "last_name": "User", "role": "Student"}'
+```
+
+### Example: Log in a user
+
+```bash
+curl -X POST http://localhost:8000/api/auth/login/ -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpassword"}'
+```
 
 ## Running the Tests
 
