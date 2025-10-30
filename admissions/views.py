@@ -19,12 +19,12 @@ class ApplicationStatusView(generics.RetrieveAPIView):
     serializer_class = ApplicationFormSerializer
     renderer_classes = [StandardizedResponseMiddleware]
 
-class VerifyApplicationView(generics.UpdateAPIView):
+class VerifyApplicationView(generics.GenericAPIView):
     queryset = ApplicationForm.objects.all()
     serializer_class = ApplicationFormSerializer
     renderer_classes = [StandardizedResponseMiddleware]
 
-    def update(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.status = 'Verified'
         instance.save()
