@@ -308,6 +308,15 @@ The project follows semantic versioning (vX.Y.Z).
 *   `GET, POST /api/payroll/payslip-entries/`
 *   `GET, PUT, PATCH, DELETE /api/payroll/payslip-entries/{id}/`
 
+### Placements
+
+*   `GET, POST /api/placements/companies/`
+*   `GET, PUT, PATCH, DELETE /api/placements/companies/{id}/`
+*   `GET, POST /api/placements/jobs/`
+*   `GET, PUT, PATCH, DELETE /api/placements/jobs/{id}/`
+*   `GET, POST /api/placements/applications/`
+*   `GET, PUT, PATCH, DELETE /api/placements/applications/{id}/`
+
 ---
 
 This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
