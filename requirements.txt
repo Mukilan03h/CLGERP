@@ -1,5 +1,5 @@
 django
-djongo
+djongo5
 pymongo
 dnspython
 djangorestframework
