@@ -1,7 +1,9 @@
 from django.db import models
 from students.models import Department
+from auth_app.models import User
 
 class Faculty(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     designation = models.CharField(max_length=100)

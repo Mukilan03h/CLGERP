@@ -1,7 +1,9 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from .models import Exam, Marks, Result
 from .serializers import ExamSerializer, MarksSerializer, ResultSerializer
+from .permissions import IsAdminUser, IsFacultyUser, IsStudentUser, IsStudentOwner, IsFacultyForSubject
 
 class ExamViewSet(viewsets.ModelViewSet):
     """
@@ -9,6 +11,12 @@ class ExamViewSet(viewsets.ModelViewSet):
     """
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAdminUser | IsFacultyUser]
+        return super().get_permissions()
 
 class MarksViewSet(viewsets.ModelViewSet):
     """
@@ -16,6 +24,22 @@ class MarksViewSet(viewsets.ModelViewSet):
     """
     queryset = Marks.objects.all()
     serializer_class = MarksSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'Student':
+            return Marks.objects.filter(student__user=user)
+        elif user.role == 'Faculty':
+            return Marks.objects.filter(subject__in=user.faculty.subjects.all())
+        return Marks.objects.all()
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update']:
+            self.permission_classes = [IsAdminUser | (IsFacultyUser & IsFacultyForSubject)]
+        elif self.action == 'destroy':
+            self.permission_classes = [IsAdminUser]
+        return super().get_permissions()
 
 class ResultViewSet(viewsets.ModelViewSet):
     """
@@ -23,6 +47,22 @@ class ResultViewSet(viewsets.ModelViewSet):
     """
     queryset = Result.objects.all()
     serializer_class = ResultSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'Student':
+            return Result.objects.filter(student__user=user)
+        return Result.objects.all()
+
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [IsAdminUser | IsFacultyUser]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAdminUser]
+        elif self.action == 'retrieve':
+            self.permission_classes = [IsAdminUser | IsFacultyUser | IsStudentOwner]
+        return super().get_permissions()
 
     def create(self, request, *args, **kwargs):
         exam_id = request.data.get('exam')
