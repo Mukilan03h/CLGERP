@@ -8,7 +8,7 @@ This is the backend for a comprehensive, production-ready College ERP system bui
 *   **Django:** 5.2.7
 *   **Django REST Framework:** 3.14+
 *   **Database:** MongoDB
-*   **MongoDB Library:** Djongo
+*   **MongoDB Library:** djongo5
 *   **Authentication:** djangorestframework-simplejwt (JWT)
 *   **API Documentation:** drf-yasg (Swagger UI)
 *   **Containerization:** Docker, Docker-Compose
@@ -52,15 +52,51 @@ Below is a simplified text-based ERD of the core modules:
 | student (FK)   |
 | status         |
 +----------------+
+
++----------------+       +----------------+       +----------------+
+|      Exam      |       |     Marks      |       |     Result     |
++----------------+       +----------------+       +----------------+
+| id (PK)        |       | id (PK)        |       | id (PK)        |
+| name           |       | exam (FK)      |       | exam (FK)      |
+| date           |------>| student (FK)   |------>| student (FK)   |
+| subjects (M2M) |       | subject (FK)   |       | total_marks    |
++----------------+       | marks          |       | percentage     |
+                         +----------------+       | grade          |
+                                                  +----------------+
+
++----------------+       +----------------+       +----------------+
+|   Classroom    |       |    TimeSlot    |       |    Timetable   |
++----------------+       +----------------+       +----------------+
+| id (PK)        |       | id (PK)        |       | id (PK)        |
+| room_no        |       | day            |       | department (FK)|
+| capacity       |       | start_time     |       | semester       |
++----------------+       | end_time       |       | subject (FK)   |
+                         +----------------+       | faculty (FK)   |
+                                                  | classroom (FK) |
+                                                  | timeslot (FK)  |
+                                                  +----------------+
+
++----------------+       +----------------+       +----------------+
+|     Hostel     |       |      Room      |       |   Allocation   |
++----------------+       +----------------+       +----------------+
+| id (PK)        |       | id (PK)        |       | id (PK)        |
+| name           |       | hostel (FK)    |------>| room (FK)      |
+| capacity       |------>| room_no        |       | student (FK)   |
++----------------+       | capacity       |       | date_allocated |
+                         | is_vacant      |       +----------------+
+                         +----------------+
 ```
 
-## 3. Modules Roadmap
+## 3. Modules
 
-This ERP is designed to be modular. The following modules are planned for future development:
+### Implemented Modules
 
 *   **Examination Management:** Marks, grading, and result generation.
 *   **Timetable & Scheduling:** Class scheduling, faculty allocation, and timetable generation.
 *   **Hostel Management:** Room allocation, mess management, and hostel attendance.
+
+### Future Roadmap
+
 *   **Library Management:** Book issuance, returns, and catalog management.
 *   **Transport Management:** Bus routes, student transport records, and fee management.
 *   **Placement & Internship Cell:** Company listings, student applications, and placement tracking.
@@ -233,6 +269,35 @@ The project follows semantic versioning (vX.Y.Z).
 *   **v1.1.0:** Implement Examination and Timetable modules.
 *   **v1.2.0:** Implement Hostel and Library modules.
 *   **v1.3.0:** Implement Transport and Placement modules.
+
+## 11. API Endpoints
+
+### Examination
+
+*   `GET, POST /api/examination/exams/`
+*   `GET, PUT, PATCH, DELETE /api/examination/exams/{id}/`
+*   `GET, POST /api/examination/marks/`
+*   `GET, PUT, PATCH, DELETE /api/examination/marks/{id}/`
+*   `GET, POST /api/examination/results/`
+*   `GET, PUT, PATCH, DELETE /api/examination/results/{id}/`
+
+### Timetable
+
+*   `GET, POST /api/timetable/classrooms/`
+*   `GET, PUT, PATCH, DELETE /api/timetable/classrooms/{id}/`
+*   `GET, POST /api/timetable/timeslots/`
+*   `GET, PUT, PATCH, DELETE /api/timetable/timeslots/{id}/`
+*   `GET, POST /api/timetable/timetables/`
+*   `GET, PUT, PATCH, DELETE /api/timetable/timetables/{id}/`
+
+### Hostel
+
+*   `GET, POST /api/hostel/hostels/`
+*   `GET, PUT, PATCH, DELETE /api/hostel/hostels/{id}/`
+*   `GET, POST /api/hostel/rooms/`
+*   `GET, PUT, PATCH, DELETE /api/hostel/rooms/{id}/`
+*   `GET, POST /api/hostel/allocations/`
+*   `GET, PUT, PATCH, DELETE /api/hostel/allocations/{id}/`
 
 ---
 
