@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/examination/', include('examination.urls')),
     path('api/timetable/', include('timetable.urls')),
     path('api/hostel/', include('hostel.urls')),
+    path('api/library/', include('library.urls')),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
