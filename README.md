@@ -94,10 +94,11 @@ Below is a simplified text-based ERD of the core modules:
 *   **Examination Management:** Marks, grading, and result generation.
 *   **Timetable & Scheduling:** Class scheduling, faculty allocation, and timetable generation.
 *   **Hostel Management:** Room allocation, mess management, and hostel attendance.
-*   **Library Management:** Book issuance, returns, and catalog management.
-*   **Transport Management:** Bus routes, student transport records, and fee management.
 
 ### Future Roadmap
+
+*   **Library Management:** Book issuance, returns, and catalog management.
+*   **Transport Management:** Bus routes, student transport records, and fee management.
 *   **Placement & Internship Cell:** Company listings, student applications, and placement tracking.
 *   **Inventory & Assets Management:** College asset tracking and inventory management.
 *   **Notifications System:** Email, SMS, and in-app notifications.
@@ -298,30 +299,14 @@ The project follows semantic versioning (vX.Y.Z).
 *   `GET, POST /api/hostel/allocations/`
 *   `GET, PUT, PATCH, DELETE /api/hostel/allocations/{id}/`
 
-### Library
+### Payroll
 
-*   `GET, POST /api/library/books/`
-*   `GET, PUT, PATCH, DELETE /api/library/books/{id}/`
-*   `GET, POST /api/library/book-issues/`
-*   `GET, PUT, PATCH, DELETE /api/library/book-issues/{id}/`
-*   `GET, POST /api/library/fines/`
-*   `GET, PUT, PATCH, DELETE /api/library/fines/{id}/`
-
-### Transport
-
-*   `GET, POST /api/transport/vehicles/`
-*   `GET, PUT, PATCH, DELETE /api/transport/vehicles/{id}/`
-*   `GET, POST /api/transport/routes/`
-*   `GET, PUT, PATCH, DELETE /api/transport/routes/{id}/`
-*   `GET, POST /api/transport/allocations/`
-*   `GET, PUT, PATCH, DELETE /api/transport/allocations/{id}/`
-
-### Inventory
-
-*   `GET, POST /api/inventory/items/`
-*   `GET, PUT, PATCH, DELETE /api/inventory/items/{id}/`
-*   `GET, POST /api/inventory/assets/`
-*   `GET, PUT, PATCH, DELETE /api/inventory/assets/{id}/`
+*   `GET, POST /api/payroll/salaries/`
+*   `GET, PUT, PATCH, DELETE /api/payroll/salaries/{id}/`
+*   `GET, POST /api/payroll/payslips/`
+*   `GET, PUT, PATCH, DELETE /api/payroll/payslips/{id}/`
+*   `GET, POST /api/payroll/payslip-entries/`
+*   `GET, PUT, PATCH, DELETE /api/payroll/payslip-entries/{id}/`
 
 ---
 

@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'library',
     'transport',
     'inventory',
+    'payroll',
 ]
 
 MIDDLEWARE = [
