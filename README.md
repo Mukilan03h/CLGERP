@@ -8,7 +8,7 @@ This is the backend for a comprehensive, production-ready College ERP system bui
 *   **Django:** 5.2.7
 *   **Django REST Framework:** 3.14+
 *   **Database:** MongoDB
-*   **MongoDB Library:** Djongo
+*   **MongoDB Library:** djongo5
 *   **Authentication:** djangorestframework-simplejwt (JWT)
 *   **API Documentation:** drf-yasg (Swagger UI)
 *   **Containerization:** Docker, Docker-Compose
