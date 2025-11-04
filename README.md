@@ -324,6 +324,15 @@ The project follows semantic versioning (vX.Y.Z).
 *   `POST /api/notifications/{id}/mark_as_read/`
 *   `POST /api/notifications/mark_all_as_read/`
 
+### Documents & Certificates
+
+*   `GET, POST /api/documents/user-documents/`
+*   `GET, PUT, PATCH, DELETE /api/documents/user-documents/{id}/`
+*   `POST /api/documents/user-documents/{id}/verify/`
+*   `POST /api/documents/user-documents/{id}/reject/`
+*   `GET, POST /api/documents/certificates/`
+*   `GET, PUT, PATCH, DELETE /api/documents/certificates/{id}/`
+
 ---
 
 This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
