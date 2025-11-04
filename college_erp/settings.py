@@ -62,13 +62,7 @@ INSTALLED_APPS = [
     'hostel',
     'library',
     'transport',
-    'placements',
-    'notifications',
-    'documents',
-    'accounting',
-    'audit',
     'inventory',
-    'payroll',
 ]
 
 MIDDLEWARE = [

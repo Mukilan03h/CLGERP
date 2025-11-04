@@ -316,6 +316,13 @@ The project follows semantic versioning (vX.Y.Z).
 *   `GET, POST /api/transport/allocations/`
 *   `GET, PUT, PATCH, DELETE /api/transport/allocations/{id}/`
 
+### Inventory
+
+*   `GET, POST /api/inventory/items/`
+*   `GET, PUT, PATCH, DELETE /api/inventory/items/{id}/`
+*   `GET, POST /api/inventory/assets/`
+*   `GET, PUT, PATCH, DELETE /api/inventory/assets/{id}/`
+
 ---
 
 This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
