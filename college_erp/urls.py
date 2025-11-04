@@ -30,5 +30,6 @@ urlpatterns = [
     path('api/finance/', include('finance.urls')),
     path('api/admissions/', include('admissions.urls')),
     path('api/attendance/', include('attendance.urls')),
+    path('api/examination/', include('examination.urls')),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
