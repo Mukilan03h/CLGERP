@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'placements',
     'notifications',
     'documents',
+    'accounting',
 ]
 
 MIDDLEWARE = [
