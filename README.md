@@ -340,6 +340,11 @@ The project follows semantic versioning (vX.Y.Z).
 *   `GET, POST /api/accounting/transactions/`
 *   `GET, PUT, PATCH, DELETE /api/accounting/transactions/{id}/`
 
+### Audit Trail
+
+*   `GET /api/audit/`
+*   `GET /api/audit/{id}/`
+
 ---
 
 This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
