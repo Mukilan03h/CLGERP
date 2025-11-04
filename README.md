@@ -94,11 +94,10 @@ Below is a simplified text-based ERD of the core modules:
 *   **Examination Management:** Marks, grading, and result generation.
 *   **Timetable & Scheduling:** Class scheduling, faculty allocation, and timetable generation.
 *   **Hostel Management:** Room allocation, mess management, and hostel attendance.
-
-### Future Roadmap
-
 *   **Library Management:** Book issuance, returns, and catalog management.
 *   **Transport Management:** Bus routes, student transport records, and fee management.
+
+### Future Roadmap
 *   **Placement & Internship Cell:** Company listings, student applications, and placement tracking.
 *   **Inventory & Assets Management:** College asset tracking and inventory management.
 *   **Notifications System:** Email, SMS, and in-app notifications.
@@ -298,6 +297,24 @@ The project follows semantic versioning (vX.Y.Z).
 *   `GET, PUT, PATCH, DELETE /api/hostel/rooms/{id}/`
 *   `GET, POST /api/hostel/allocations/`
 *   `GET, PUT, PATCH, DELETE /api/hostel/allocations/{id}/`
+
+### Library
+
+*   `GET, POST /api/library/books/`
+*   `GET, PUT, PATCH, DELETE /api/library/books/{id}/`
+*   `GET, POST /api/library/book-issues/`
+*   `GET, PUT, PATCH, DELETE /api/library/book-issues/{id}/`
+*   `GET, POST /api/library/fines/`
+*   `GET, PUT, PATCH, DELETE /api/library/fines/{id}/`
+
+### Transport
+
+*   `GET, POST /api/transport/vehicles/`
+*   `GET, PUT, PATCH, DELETE /api/transport/vehicles/{id}/`
+*   `GET, POST /api/transport/routes/`
+*   `GET, PUT, PATCH, DELETE /api/transport/routes/{id}/`
+*   `GET, POST /api/transport/allocations/`
+*   `GET, PUT, PATCH, DELETE /api/transport/allocations/{id}/`
 
 ---
 

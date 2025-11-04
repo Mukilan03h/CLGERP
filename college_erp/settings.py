@@ -57,6 +57,18 @@ INSTALLED_APPS = [
     'finance',
     'admissions',
     'attendance',
+    'examination',
+    'timetable',
+    'hostel',
+    'library',
+    'transport',
+    'placements',
+    'notifications',
+    'documents',
+    'accounting',
+    'audit',
+    'inventory',
+    'payroll',
 ]
 
 MIDDLEWARE = [
