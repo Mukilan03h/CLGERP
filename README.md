@@ -1,125 +1,239 @@
 # College ERP Backend
 
-This is the backend for the College ERP system, built with Django, Django REST Framework, and MongoDB.
+This is the backend for a comprehensive, production-ready College ERP system built with Django, Django REST Framework, and MongoDB. This project aims to provide a scalable and robust solution for managing all aspects of a college's operations.
 
-## Features
+## 1. Full Tech Stack Breakdown
 
-*   **Authentication:** JWT-based authentication with roles (Admin, Faculty, Student, Accountant, AdmissionOfficer).
-*   **Student Information:** Manage student records, including personal details, academic information, and documents.
-*   **Faculty Management:** Manage faculty records, including personal details, subjects, and leave requests.
-*   **Finance Management:** Manage fee structures and payment records.
-*   **Admission Management:** Manage admission applications and merit lists.
-*   **Attendance Management:** Manage attendance records and subjects.
-*   **API Documentation:** Swagger UI for API documentation.
-*   **Containerization:** Docker and Docker Compose for easy deployment.
+*   **Python:** 3.8+
+*   **Django:** 5.2.7
+*   **Django REST Framework:** 3.14+
+*   **Database:** MongoDB
+*   **MongoDB Library:** Djongo
+*   **Authentication:** djangorestframework-simplejwt (JWT)
+*   **API Documentation:** drf-yasg (Swagger UI)
+*   **Containerization:** Docker, Docker-Compose
+*   **Code Quality:** Black, isort
+*   **Testing:** Pytest, pytest-django
 
-## Getting Started
+## 2. Database Schema Diagram
 
-### Prerequisites
+Below is a simplified text-based ERD of the core modules:
 
-*   Docker
-*   Docker Compose
-
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/college-erp-backend.git
-    ```
-2.  Create a `.env` file in the root directory and add the following environment variables:
-    ```
-    MONGO_URI=mongodb+srv://<user>:<password>@<cluster-address>/<database-name>
-    SECRET_KEY=your-secret-key
-    DEBUG=True
-    ```
-3.  Build and run the Docker containers:
-    ```bash
-    docker-compose up --build
-    ```
-4.  The application will be available at `http://localhost:8000`.
-
-## API Documentation
-
-The API documentation is available at `http://localhost:8000/api/docs/`.
-
-## API Endpoints
-
-### Authentication
-
-*   `POST /api/auth/register/`: Register a new user.
-*   `POST /api/auth/login/`: Log in a user and get a JWT token.
-*   `POST /api/auth/token/refresh/`: Refresh a JWT token.
-*   `GET /api/auth/me/`: Get the current user's profile.
-
-### Student Information
-
-*   `GET /api/students/`: Get a list of all students.
-*   `POST /api/students/`: Create a new student.
-*   `GET /api/students/{id}/`: Get a student by their ID.
-*   `PATCH /api/students/{id}/`: Update a student by their ID.
-*   `DELETE /api/students/{id}/`: Delete a student by their ID.
-*   `GET /api/students/roll/{roll_no}/`: Get a student by their roll number.
-
-### Faculty Management
-
-*   `GET /api/faculty/`: Get a list of all faculty.
-*   `POST /api/faculty/`: Create a new faculty member.
-*   `GET /api/faculty/{id}/`: Get a faculty member by their ID.
-*   `PATCH /api/faculty/{id}/`: Update a faculty member by their ID.
-*   `DELETE /api/faculty/{id}/`: Delete a faculty member by their ID.
-*   `GET /api/faculty/leave-requests/`: Get a list of all leave requests.
-*   `POST /api/faculty/leave-requests/`: Create a new leave request.
-*   `GET /api/faculty/leave-requests/{id}/`: Get a leave request by its ID.
-*   `PATCH /api/faculty/leave-requests/{id}/`: Update a leave request by its ID.
-*   `DELETE /api/faculty/leave-requests/{id}/`: Delete a leave request by its ID.
-
-### Finance Management
-
-*   `GET /api/finance/structure/`: Get a list of all fee structures.
-*   `POST /api/finance/structure/`: Create a new fee structure.
-*   `GET /api/finance/structure/{id}/`: Get a fee structure by its ID.
-*   `PATCH /api/finance/structure/{id}/`: Update a fee structure by its ID.
-*   `DELETE /api/finance/structure/{id}/`: Delete a fee structure by its ID.
-*   `GET /api/finance/payment/`: Get a list of all payment records.
-*   `POST /api/finance/payment/`: Create a new payment record.
-*   `GET /api/finance/payment/{id}/`: Get a payment record by its ID.
-*   `PATCH /api/finance/payment/{id}/`: Update a payment record by its ID.
-*   `DELETE /api/finance/payment/{id}/`: Delete a payment record by its ID.
-*   `GET /api/finance/student/{student_id}/`: Get a student's fee records.
-
-### Admission Management
-
-*   `GET /api/admissions/apply/`: Get a list of all admission applications.
-*   `POST /api/admissions/apply/`: Create a new admission application.
-*   `GET /api/admissions/{id}/`: Get an admission application by its ID.
-*   `PATCH /api/admissions/{id}/`: Update an admission application by its ID.
-*   `DELETE /api/admissions/{id}/`: Delete an admission application by its ID.
-*   `GET /api/admissions/status/{id}/`: Get the status of an admission application.
-*   `POST /api/admissions/verify/{id}/`: Verify an admission application.
-*   `GET /api/admissions/merit-list/`: Get a list of all merit lists.
-*   `POST /api/admissions/merit-list/`: Create a new merit list.
-*   `GET /api/admissions/merit-list/{id}/`: Get a merit list by its ID.
-*   `PATCH /api/admissions/merit-list/{id}/`: Update a merit list by its ID.
-*   `DELETE /api/admissions/merit-list/{id}/`: Delete a merit list by its ID.
-
-### Attendance Management
-
-*   `GET /api/attendance/subjects/`: Get a list of all subjects.
-*   `POST /api/attendance/subjects/`: Create a new subject.
-*   `GET /api/attendance/subjects/{id}/`: Get a subject by its ID.
-*   `PATCH /api/attendance/subjects/{id}/`: Update a subject by its ID.
-*   `DELETE /api/attendance/subjects/{id}/`: Delete a subject by its ID.
-*   `GET /api/attendance/mark/`: Get a list of all attendance records.
-*   `POST /api/attendance/mark/`: Create a new attendance record.
-*   `GET /api/attendance/{id}/`: Get an attendance record by its ID.
-*   `PATCH /api/attendance/{id}/`: Update an attendance record by its ID.
-*   `DELETE /api/attendance/{id}/`: Delete an attendance record by its ID.
-*   `GET /api/attendance/student/{student_id}/`: Get a student's attendance records.
-*   `GET /api/attendance/report/{semester}/`: Get a semester-wise attendance report.
-
-## Running the Tests
-
-To run the tests, run the following command:
-```bash
-pytest
 ```
++----------------+       +------------------+       +----------------+
+|      User      |       |     Student      |       |    Department    |
++----------------+       +------------------+       +----------------+
+| id (PK)        |       | id (PK)          |       | id (PK)          |
+| username       |       | name             |       | name             |
+| password       |       | roll_no          |       | code             |
+| role           |------>| department (FK)  |------>|                  |
++----------------+       | semester         |       +----------------+
+                         | guardian_info    |
+                         | documents        |
+                         +------------------+
+
++----------------+       +------------------+       +----------------+
+|     Faculty    |       |  LeaveRequest    |       |     Subject      |
++----------------+       +------------------+       +----------------+
+| id (PK)        |       | id (PK)          |       | id (PK)          |
+| name           |       | faculty (FK)     |------>| name             |
+| department (FK)  |------>| start_date       |       | code             |
+| designation    |       | end_date         |       | semester         |
+| subjects (M2M) |------>| reason           |       +----------------+
++----------------+       | status           |
+                         +------------------+
+
++----------------+
+|   Attendance   |
++----------------+
+| id (PK)        |
+| date           |
+| subject (FK)   |
+| student (FK)   |
+| status         |
++----------------+
+```
+
+## 3. Modules Roadmap
+
+This ERP is designed to be modular. The following modules are planned for future development:
+
+*   **Examination Management:** Marks, grading, and result generation.
+*   **Timetable & Scheduling:** Class scheduling, faculty allocation, and timetable generation.
+*   **Hostel Management:** Room allocation, mess management, and hostel attendance.
+*   **Library Management:** Book issuance, returns, and catalog management.
+*   **Transport Management:** Bus routes, student transport records, and fee management.
+*   **Placement & Internship Cell:** Company listings, student applications, and placement tracking.
+*   **Inventory & Assets Management:** College asset tracking and inventory management.
+*   **Notifications System:** Email, SMS, and in-app notifications.
+*   **Document Verification & Certificates:** Generation of bonafide certificates, transfer certificates, and marksheets.
+*   **Accounting Ledger & Reports:** Financial accounting, ledger management, and report generation.
+*   **Audit Trail & Activity Logs:** Logging user activities for security and auditing purposes.
+
+## 4. JWT Refresh Flow + RBAC Middleware Explanation
+
+### JWT Refresh Flow
+
+The authentication system uses JWT with a refresh token mechanism. When a user logs in, they receive an `access_token` and a `refresh_token`. The `access_token` is short-lived (15 minutes) and is used to authenticate API requests. The `refresh_token` is long-lived (7 days) and is used to obtain a new `access_token` when the old one expires.
+
+### Role-Based Access Control (RBAC)
+
+RBAC is enforced using custom permission classes in Django REST Framework. Each user has a `role` field (e.g., 'Admin', 'Faculty', 'Student'). Custom permission classes check the user's role before allowing access to an endpoint.
+
+**Example Permission Class:**
+
+```python
+# auth_app/permissions.py
+from rest_framework.permissions import BasePermission
+
+class IsAdminUser(BasePermission):
+    """
+    Allows access only to admin users.
+    """
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated and request.user.role == 'Admin'
+```
+
+This permission class can then be added to any view to restrict access to admins only.
+
+## 5. Production Deployment Guide
+
+### Environment Variables
+
+Create a `.env.prod` file with the following variables:
+
+```
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster-address>/<database-name>
+SECRET_KEY=your-production-secret-key
+DEBUG=False
+ALLOWED_HOSTS=your-domain.com,api.your-domain.com
+```
+
+### Gunicorn + Nginx
+
+For production, it is recommended to use Gunicorn as the WSGI server and Nginx as a reverse proxy.
+
+**Gunicorn:**
+
+```bash
+gunicorn --workers 3 --bind 0.0.0.0:8000 college_erp.wsgi:application
+```
+
+**Nginx:**
+
+Create a new Nginx configuration file in `/etc/nginx/sites-available/college_erp`:
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com api.your-domain.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /path/to/your/project;
+    }
+
+    location / {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass http://unix:/path/to/your/project/gunicorn.sock;
+    }
+}
+```
+
+### MongoDB Atlas IP Whitelist
+
+When using MongoDB Atlas, ensure that you whitelist the IP address of your production server to allow incoming connections.
+
+### CI/CD
+
+A simple CI/CD pipeline can be set up using GitHub Actions to automatically deploy the application on push to the `main` branch.
+
+## 6. Testing Coverage + Folder Structure Sample
+
+The project follows a modular structure, with each app having its own dedicated folder.
+
+```
+/apps
+    /students
+    /faculty
+    ...
+/core
+/config
+/tests
+    /students
+        - test_models.py
+        - test_views.py
+    /faculty
+        - test_models.py
+        - test_views.py
+```
+
+## 7. Contributing + Coding Standards
+
+### Pull Requests
+
+*   Fork the repository.
+*   Create a new branch for your feature or bug fix.
+*   Make your changes and write tests.
+*   Ensure that all tests pass.
+*   Submit a pull request with a detailed description of your changes.
+
+### Naming Conventions
+
+*   Branches: `feature/<feature-name>`, `bugfix/<bug-name>`
+*   Commits: Use conventional commit messages (e.g., `feat: add student search functionality`).
+
+## 8. API Response Standard Format
+
+All API responses follow a standardized format:
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "John Doe",
+        "roll_no": "S12345"
+    },
+    "message": "Student created successfully."
+}
+```
+
+In case of an error:
+
+```json
+{
+    "success": false,
+    "errors": {
+        "roll_no": [
+            "Student with this roll no already exists."
+        ]
+    },
+    "message": "Invalid input."
+}
+```
+
+## 9. Security
+
+*   **Rate Limiting:** API endpoints are rate-limited to prevent abuse.
+*   **CSRF:** While JWT is used for authentication, CSRF protection is still enabled for session-based authentication in the Django admin panel.
+*   **CORS:** Cross-Origin Resource Sharing (CORS) is configured to only allow requests from whitelisted domains in production.
+*   **Password Hashing:** Passwords are hashed using Django's default password hashing algorithm (PBKDF2).
+*   **Sensitive Data:** All sensitive data is stored in environment variables and is not hard-coded in the source code.
+
+## 10. Versioning + Roadmap
+
+The project follows semantic versioning (vX.Y.Z).
+
+### Roadmap (Next 3-6 Months)
+
+*   **v1.1.0:** Implement Examination and Timetable modules.
+*   **v1.2.0:** Implement Hostel and Library modules.
+*   **v1.3.0:** Implement Transport and Placement modules.
+
+---
+
+This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
