@@ -10,3 +10,6 @@ __pycache__/
 # IDE
 .idea/
 .vscode/
+
+# Test artifacts
+/resumes/

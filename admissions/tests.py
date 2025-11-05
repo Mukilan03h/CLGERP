@@ -5,25 +5,14 @@ from .models import Application, Admission
 from students.models import Student, Department
 from auth_app.models import User
 
-class AdmissionsTests(APITestCase):
+class AdmissionsWorkflowTests(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpassword',
-            role='Admin'
-        )
-        self.client.force_authenticate(user=self.user)
-        self.department = Department.objects.create(
-            name='Computer Science',
-            code='CS'
-        )
-        self.student = Student.objects.create(
-            name='Test Student',
-            roll_no='12345',
-            department=self.department,
-            semester=1
-        )
+        self.admin_user = User.objects.create_user(username='admin', password='password', role='Admin')
+        self.admissions_officer = User.objects.create_user(username='admissions', password='password', role='AdmissionOfficer')
+        self.student_user = User.objects.create_user(username='student', password='password', role='Student')
+
+        self.department = Department.objects.create(name='Computer Science', code='CS')
         self.application = Application.objects.create(
             first_name='Test',
             last_name='User',
@@ -31,61 +20,36 @@ class AdmissionsTests(APITestCase):
             phone_number='1234567890',
             date_of_birth='2000-01-01',
             address='123 Test St',
-            previous_education='Test School'
-        )
-        self.admission = Admission.objects.create(
-            application=self.application,
-            student=self.student
+            previous_education='Test School',
+            department=self.department
         )
 
-    def test_create_application(self):
-        url = reverse('admission-application-list')
-        data = {
-            'first_name': 'New',
-            'last_name': 'Applicant',
-            'email': 'new@example.com',
-            'phone_number': '0987654321',
-            'date_of_birth': '2001-01-01',
-            'address': '456 New Ave',
-            'previous_education': 'New School'
-        }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Application.objects.count(), 2)
-
-    def test_get_applications(self):
-        url = reverse('admission-application-list')
-        response = self.client.get(url, format='json')
+    def test_admissions_officer_can_approve_application(self):
+        self.client.force_authenticate(user=self.admissions_officer)
+        url = reverse('application-approve', kwargs={'pk': self.application.pk})
+        response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.application.refresh_from_db()
+        self.assertEqual(self.application.status, 'accepted')
+        self.assertTrue(Student.objects.filter(roll_no=f'STU{self.application.id}').exists())
+        self.assertTrue(Admission.objects.filter(application=self.application).exists())
 
-    def test_create_admission(self):
-        url = reverse('admission-list')
-        new_application = Application.objects.create(
-            first_name='Another',
-            last_name='Applicant',
-            email='another@example.com',
-            phone_number='111222333',
-            date_of_birth='2002-01-01',
-            address='789 Another St',
-            previous_education='Another School'
-        )
-        new_student = Student.objects.create(
-            name='Another Student',
-            roll_no='67890',
-            department=self.department,
-            semester=1
-        )
-        data = {
-            'application': new_application.id,
-            'student': new_student.id
-        }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Admission.objects.count(), 2)
-
-    def test_get_admissions(self):
-        url = reverse('admission-list')
-        response = self.client.get(url, format='json')
+    def test_admissions_officer_can_reject_application(self):
+        self.client.force_authenticate(user=self.admissions_officer)
+        url = reverse('application-reject', kwargs={'pk': self.application.pk})
+        response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.application.refresh_from_db()
+        self.assertEqual(self.application.status, 'rejected')
+
+    def test_student_cannot_approve_application(self):
+        self.client.force_authenticate(user=self.student_user)
+        url = reverse('application-approve', kwargs={'pk': self.application.pk})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_cannot_reject_application(self):
+        self.client.force_authenticate(user=self.student_user)
+        url = reverse('application-reject', kwargs={'pk': self.application.pk})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

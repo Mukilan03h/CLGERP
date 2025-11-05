@@ -1,5 +1,5 @@
 from django.db import models
-from students.models import Student
+from students.models import Student, Department
 
 class Application(models.Model):
     STATUS_CHOICES = (
@@ -16,6 +16,7 @@ class Application(models.Model):
     date_of_birth = models.DateField()
     address = models.TextField()
     previous_education = models.TextField()
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     application_date = models.DateTimeField(auto_now_add=True)
 
