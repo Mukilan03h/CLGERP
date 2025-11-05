@@ -301,4 +301,11 @@ The project follows semantic versioning (vX.Y.Z).
 
 ---
 
+## 12. Documentation
+
+For more detailed information, please refer to the following documents in the `docs` directory:
+
+*   **[Testing](docs/TESTING.md):** Instructions on how to run the test suite and a summary of the latest test results.
+*   **[API Sample Requests](docs/API_SAMPLES.md):** Sample API requests for all the implemented modules, formatted for use with tools like Postman.
+
 This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
