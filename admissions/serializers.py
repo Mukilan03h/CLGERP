@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import ApplicationForm, MeritList
+from .models import Application, Admission
 
-class ApplicationFormSerializer(serializers.ModelSerializer):
+class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ApplicationForm
+        model = Application
         fields = '__all__'
 
-class MeritListSerializer(serializers.ModelSerializer):
+class AdmissionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MeritList
+        model = Admission
         fields = '__all__'

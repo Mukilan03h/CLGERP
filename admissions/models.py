@@ -1,19 +1,31 @@
 from django.db import models
-from students.models import Student, Department
+from students.models import Student
 
-class ApplicationForm(models.Model):
-    student_info = models.ForeignKey(Student, on_delete=models.CASCADE)
-    score = models.FloatField()
-    status = models.CharField(max_length=20, default='Pending')
-    documents = models.FileField(upload_to='admission_documents/', blank=True, null=True)
+class Application(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('reviewed', 'Reviewed'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    )
+
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15)
+    date_of_birth = models.DateField()
+    address = models.TextField()
+    previous_education = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    application_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.student_info.name} - {self.status}'
+        return f'{self.first_name} {self.last_name}'
 
-class MeritList(models.Model):
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    rank = models.IntegerField()
-    student_ref = models.ForeignKey(Student, on_delete=models.CASCADE)
+class Admission(models.Model):
+    application = models.OneToOneField(Application, on_delete=models.CASCADE)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    admission_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.department.name} - Rank {self.rank}'
+        return f'Admission for {self.student}'

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Attendance, Subject
+from .models import Subject, Attendance
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
