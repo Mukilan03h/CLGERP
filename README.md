@@ -106,11 +106,16 @@ Below is a simplified text-based ERD of the core modules:
 
 ### Future Roadmap
 
-*   **Admissions Management:** Handling the entire student admission process, from application to enrollment.
-*   **Attendance Tracking:** Recording and managing student and faculty attendance.
-*   **Finance & Fee Management:** Fee collection, expense tracking, and financial reporting.
+All modules on the original roadmap have now been implemented. Future work will focus on expanding the existing feature set and improving the user experience.
 
-## 4. JWT Refresh Flow + RBAC Middleware Explanation
+## 4. Documentation
+
+Detailed documentation is available in the `docs` directory:
+
+*   **`docs/API_SAMPLES.md`**: Provides detailed examples of API requests and responses for all modules.
+*   **`docs/TESTING.md`**: A guide on how to run the test suite.
+
+## 5. JWT Refresh Flow + RBAC Middleware Explanation
 
 ### JWT Refresh Flow
 
@@ -276,57 +281,110 @@ The project follows semantic versioning (vX.Y.Z).
 
 ## 11. API Endpoints
 
-### Examination
+A full, interactive API documentation is available through Swagger UI at the `/api/docs/` endpoint. The following is a summary of the available endpoints.
 
-*   `GET, POST /api/examination/exams/`
-*   `GET, PUT, PATCH, DELETE /api/examination/exams/{id}/`
-*   `GET, POST /api/examination/marks/`
-*   `GET, PUT, PATCH, DELETE /api/examination/marks/{id}/`
-*   `GET, POST /api/examination/results/`
-*   `GET, PUT, PATCH, DELETE /api/examination/results/{id}/`
+### Authentication
+-   `POST /api/auth/login/`: User login.
+-   `POST /api/auth/register/`: User registration.
+-   `POST /api/auth/token/refresh/`: Refresh JWT token.
+
+### Students
+-   `GET, POST /api/students/`: List all students or create a new student.
+-   `GET, PUT, PATCH, DELETE /api/students/{id}/`: Retrieve, update or delete a student.
+
+### Faculty
+-   `GET, POST /api/faculty/`: List all faculty or create a new faculty member.
+-   `GET, PUT, PATCH, DELETE /api/faculty/{id}/`: Retrieve, update or delete a faculty member.
+-   `GET, POST /api/faculty/leave-requests/`: List all leave requests or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/faculty/leave-requests/{id}/`: Retrieve, update or delete a leave request.
+
+### Finance
+-   `GET, POST /api/finance/fee-structures/`: List all fee structures or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/finance/fee-structures/{id}/`: Retrieve, update or delete a fee structure.
+-   `GET, POST /api/finance/fee-payments/`: List all fee payments or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/finance/fee-payments/{id}/`: Retrieve, update or delete a fee payment.
+-   `GET, POST /api/finance/expenses/`: List all expenses or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/finance/expenses/{id}/`: Retrieve, update or delete an expense.
+
+### Admissions
+-   `GET, POST /api/admissions/applications/`: List all applications or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/admissions/applications/{id}/`: Retrieve, update or delete an application.
+-   `GET, POST /api/admissions/admissions/`: List all admissions or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/admissions/admissions/{id}/`: Retrieve, update or delete an admission.
+
+### Attendance
+-   `GET, POST /api/attendance/subjects/`: List all subjects or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/attendance/subjects/{id}/`: Retrieve, update or delete a subject.
+-   `GET, POST /api/attendance/attendance/`: List all attendance records or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/attendance/attendance/{id}/`: Retrieve, update or delete an attendance record.
+
+### Examination
+-   `GET, POST /api/examination/exams/`: List all exams or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/examination/exams/{id}/`: Retrieve, update or delete an exam.
+-   `GET, POST /api/examination/marks/`: List all marks or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/examination/marks/{id}/`: Retrieve, update or delete a marks record.
+-   `GET, POST /api/examination/results/`: List all results or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/examination/results/{id}/`: Retrieve, update or delete a result.
 
 ### Timetable
-
-*   `GET, POST /api/timetable/classrooms/`
-*   `GET, PUT, PATCH, DELETE /api/timetable/classrooms/{id}/`
-*   `GET, POST /api/timetable/timeslots/`
-*   `GET, PUT, PATCH, DELETE /api/timetable/timeslots/{id}/`
-*   `GET, POST /api/timetable/timetables/`
-*   `GET, PUT, PATCH, DELETE /api/timetable/timetables/{id}/`
+-   `GET, POST /api/timetable/classrooms/`: List all classrooms or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/timetable/classrooms/{id}/`: Retrieve, update or delete a classroom.
+-   `GET, POST /api/timetable/timeslots/`: List all time slots or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/timetable/timeslots/{id}/`: Retrieve, update or delete a time slot.
+-   `GET, POST /api/timetable/timetables/`: List all timetables or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/timetable/timetables/{id}/`: Retrieve, update or delete a timetable.
 
 ### Hostel
+-   `GET, POST /api/hostel/hostels/`: List all hostels or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/hostel/hostels/{id}/`: Retrieve, update or delete a hostel.
+-   `GET, POST /api/hostel/rooms/`: List all rooms or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/hostel/rooms/{id}/`: Retrieve, update or delete a room.
+-   `GET, POST /api/hostel/allocations/`: List all allocations or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/hostel/allocations/{id}/`: Retrieve, update or delete an allocation.
 
-*   `GET, POST /api/hostel/hostels/`
-*   `GET, PUT, PATCH, DELETE /api/hostel/hostels/{id}/`
-*   `GET, POST /api/hostel/rooms/`
-*   `GET, PUT, PATCH, DELETE /api/hostel/rooms/{id}/`
-*   `GET, POST /api/hostel/allocations/`
-*   `GET, PUT, PATCH, DELETE /api/hostel/allocations/{id}/`
+### Library
+-   `GET, POST /api/library/books/`: List all books or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/library/books/{id}/`: Retrieve, update or delete a book.
+-   `GET, POST /api/library/book-issues/`: List all book issues or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/library/book-issues/{id}/`: Retrieve, update or delete a book issue.
+-   `GET, POST /api/library/fines/`: List all fines or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/library/fines/{id}/`: Retrieve, update or delete a fine.
+
+### Transport
+-   `GET, POST /api/transport/vehicles/`: List all vehicles or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/transport/vehicles/{id}/`: Retrieve, update or delete a vehicle.
+-   `GET, POST /api/transport/routes/`: List all routes or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/transport/routes/{id}/`: Retrieve, update or delete a route.
+-   `GET, POST /api/transport/allocations/`: List all transport allocations or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/transport/allocations/{id}/`: Retrieve, update or delete a transport allocation.
+
+### Inventory
+-   `GET, POST /api/inventory/items/`: List all items or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/inventory/items/{id}/`: Retrieve, update or delete an item.
+-   `GET, POST /api/inventory/suppliers/`: List all suppliers or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/inventory/suppliers/{id}/`: Retrieve, update or delete a supplier.
 
 ### Payroll
-
-*   `GET, POST /api/payroll/salaries/`
-*   `GET, PUT, PATCH, DELETE /api/payroll/salaries/{id}/`
-*   `GET, POST /api/payroll/payslips/`
-*   `GET, PUT, PATCH, DELETE /api/payroll/payslips/{id}/`
-*   `GET, POST /api/payroll/payslip-entries/`
-*   `GET, PUT, PATCH, DELETE /api/payroll/payslip-entries/{id}/`
+-   `GET, POST /api/payroll/salaries/`: List all salaries or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/payroll/salaries/{id}/`: Retrieve, update or delete a salary.
+-   `GET, POST /api/payroll/payslips/`: List all payslips or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/payroll/payslips/{id}/`: Retrieve, update or delete a payslip.
+-   `GET, POST /api/payroll/payslip-entries/`: List all payslip entries or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/payroll/payslip-entries/{id}/`: Retrieve, update or delete a payslip entry.
 
 ### Placements
-
-*   `GET, POST /api/placements/companies/`
-*   `GET, PUT, PATCH, DELETE /api/placements/companies/{id}/`
-*   `GET, POST /api/placements/jobs/`
-*   `GET, PUT, PATCH, DELETE /api/placements/jobs/{id}/`
-*   `GET, POST /api/placements/applications/`
-*   `GET, PUT, PATCH, DELETE /api/placements/applications/{id}/`
+-   `GET, POST /api/placements/companies/`: List all companies or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/placements/companies/{id}/`: Retrieve, update or delete a company.
+-   `GET, POST /api/placements/jobs/`: List all jobs or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/placements/jobs/{id}/`: Retrieve, update or delete a job.
+-   `GET, POST /api/placements/applications/`: List all applications or create a new one.
+-   `GET, PUT, PATCH, DELETE /api/placements/applications/{id}/`: Retrieve, update or delete an application.
 
 ### Notifications
-
-*   `GET /api/notifications/`
-*   `GET /api/notifications/{id}/`
-*   `POST /api/notifications/{id}/mark_as_read/`
-*   `POST /api/notifications/mark_all_as_read/`
+-   `GET /api/notifications/`: List all notifications for the current user.
+-   `GET /api/notifications/{id}/`: Retrieve a specific notification.
+-   `POST /api/notifications/{id}/mark_as_read/`: Mark a notification as read.
+-   `POST /api/notifications/mark_all_as_read/`: Mark all notifications as read.
 
 ---
 
