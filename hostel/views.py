@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Hostel, Room, Allocation
 from .serializers import HostelSerializer, RoomSerializer, AllocationSerializer
-from .permissions import IsAdminUser, IsStudentOwner
+from .permissions import IsAdminOrReadOnly, IsStudentOwner
 
 class HostelViewSet(viewsets.ModelViewSet):
     """
@@ -10,12 +10,7 @@ class HostelViewSet(viewsets.ModelViewSet):
     """
     queryset = Hostel.objects.all()
     serializer_class = HostelSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class RoomViewSet(viewsets.ModelViewSet):
     """
@@ -23,12 +18,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     """
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class AllocationViewSet(viewsets.ModelViewSet):
     """
@@ -36,10 +26,17 @@ class AllocationViewSet(viewsets.ModelViewSet):
     """
     queryset = Allocation.objects.all()
     serializer_class = AllocationSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser | IsStudentOwner]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'Student':
+        if user.role == 'Admin':
+            return Allocation.objects.all()
+        elif user.role == 'Student':
             return Allocation.objects.filter(student__user=user)
-        return Allocation.objects.all()
+        return Allocation.objects.none()
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            self.permission_classes = [IsAuthenticated, IsAdminOrReadOnly | IsStudentOwner]
+        return super().get_permissions()

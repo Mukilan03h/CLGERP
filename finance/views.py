@@ -1,31 +1,33 @@
-from rest_framework import generics
-from .models import FeeStructure, PaymentRecord
-from .serializers import FeeStructureSerializer, PaymentRecordSerializer
-from auth_app.middleware import StandardizedResponseMiddleware
+from rest_framework import viewsets
+from .models import FeeStructure, FeePayment, Expense
+from .serializers import FeeStructureSerializer, FeePaymentSerializer, ExpenseSerializer
+from .permissions import IsAdminOrReadOnly, IsStudentOwner
+from rest_framework.permissions import IsAuthenticated
 
-class FeeStructureListCreateView(generics.ListCreateAPIView):
+class FeeStructureViewSet(viewsets.ModelViewSet):
     queryset = FeeStructure.objects.all()
     serializer_class = FeeStructureSerializer
-    renderer_classes = [StandardizedResponseMiddleware]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
-class FeeStructureRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = FeeStructure.objects.all()
-    serializer_class = FeeStructureSerializer
-    renderer_classes = [StandardizedResponseMiddleware]
-
-class PaymentRecordListCreateView(generics.ListCreateAPIView):
-    queryset = PaymentRecord.objects.all()
-    serializer_class = PaymentRecordSerializer
-    renderer_classes = [StandardizedResponseMiddleware]
-
-class PaymentRecordRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = PaymentRecord.objects.all()
-    serializer_class = PaymentRecordSerializer
-    renderer_classes = [StandardizedResponseMiddleware]
-
-class StudentFeeView(generics.ListAPIView):
-    serializer_class = PaymentRecordSerializer
-    renderer_classes = [StandardizedResponseMiddleware]
+class FeePaymentViewSet(viewsets.ModelViewSet):
+    queryset = FeePayment.objects.all()
+    serializer_class = FeePaymentSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
-        return PaymentRecord.objects.filter(student_id=self.kwargs['student_id'])
+        user = self.request.user
+        if user.role == 'Admin':
+            return FeePayment.objects.all()
+        elif user.role == 'Student':
+            return FeePayment.objects.filter(student__user=user)
+        return FeePayment.objects.none()
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            self.permission_classes = [IsAuthenticated, IsStudentOwner]
+        return super().get_permissions()
+
+class ExpenseViewSet(viewsets.ModelViewSet):
+    queryset = Expense.objects.all()
+    serializer_class = ExpenseSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]

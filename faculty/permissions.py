@@ -11,13 +11,9 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an object or admins to view it.
+    Custom permission to only allow owners of an object or admins to edit it.
     """
     def has_object_permission(self, request, view, obj):
-        if request.user.role == 'Admin':
+        if request.method in permissions.SAFE_METHODS:
             return True
-        if hasattr(obj, 'faculty'):
-            return obj.faculty.user == request.user
-        if hasattr(obj, 'payslip'):
-            return obj.payslip.faculty.user == request.user
-        return False
+        return obj.user == request.user or request.user.role == 'Admin'

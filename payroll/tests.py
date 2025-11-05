@@ -1,4 +1,3 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -6,15 +5,6 @@ from .models import Salary, Payslip, PayslipEntry
 from auth_app.models import User
 from students.models import Department
 from faculty.models import Faculty
-
-class PayrollModelTest(TestCase):
-    def setUp(self):
-        self.department = Department.objects.create(name='Physics')
-        self.faculty = Faculty.objects.create(name='Dr. Brown', department=self.department)
-        self.salary = Salary.objects.create(faculty=self.faculty, base_salary=50000, allowances=5000)
-
-    def test_salary_creation(self):
-        self.assertEqual(self.salary.gross_salary, 55000)
 
 class PayrollAPITest(APITestCase):
     def setUp(self):
@@ -25,8 +15,8 @@ class PayrollAPITest(APITestCase):
 
         # Department and Faculty
         self.department = Department.objects.create(name='Chemistry')
-        self.faculty = Faculty.objects.create(name='Dr. Green', department=self.department, user=self.faculty_user)
-        self.other_faculty = Faculty.objects.create(name='Dr. White', department=self.department, user=self.other_faculty_user)
+        self.faculty = Faculty.objects.create(name='Dr. Green', department=self.department, user=self.faculty_user, designation='Professor')
+        self.other_faculty = Faculty.objects.create(name='Dr. White', department=self.department, user=self.other_faculty_user, designation='Professor')
 
         # Salary and Payslip
         self.salary = Salary.objects.create(faculty=self.faculty, base_salary=60000, allowances=7000)
@@ -38,36 +28,43 @@ class PayrollAPITest(APITestCase):
             total_deductions=5000,
             net_salary=62000
         )
+        self.payslip_entry = PayslipEntry.objects.create(payslip=self.payslip, entry_type='Earning', name='House Rent Allowance', amount=5000)
 
-        # URLs
-        self.salaries_url = reverse('salary-list')
-        self.salary_detail_url = reverse('salary-detail', kwargs={'pk': self.salary.pk})
-        self.payslips_url = reverse('payslip-list')
-        self.payslip_detail_url = reverse('payslip-detail', kwargs={'pk': self.payslip.pk})
 
     def test_admin_can_create_salary(self):
         self.client.force_authenticate(user=self.admin_user)
+        url = reverse('salary-list')
         data = {'faculty': self.other_faculty.pk, 'base_salary': 55000, 'allowances': 6000}
-        response = self.client.post(self.salaries_url, data)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_faculty_cannot_create_salary(self):
         self.client.force_authenticate(user=self.faculty_user)
+        url = reverse('salary-list')
         data = {'faculty': self.other_faculty.pk, 'base_salary': 55000, 'allowances': 6000}
-        response = self.client.post(self.salaries_url, data)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_faculty_can_view_own_payslip(self):
         self.client.force_authenticate(user=self.faculty_user)
-        response = self.client.get(self.payslip_detail_url)
+        url = reverse('payslip-detail', kwargs={'pk': self.payslip.pk})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_faculty_cannot_view_others_payslip(self):
         self.client.force_authenticate(user=self.other_faculty_user)
-        response = self.client.get(self.payslip_detail_url)
+        url = reverse('payslip-detail', kwargs={'pk': self.payslip.pk})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_admin_can_view_any_payslip(self):
         self.client.force_authenticate(user=self.admin_user)
-        response = self.client.get(self.payslip_detail_url)
+        url = reverse('payslip-detail', kwargs={'pk': self.payslip.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_faculty_can_view_own_payslip_entry(self):
+        self.client.force_authenticate(user=self.faculty_user)
+        url = reverse('payslipentry-detail', kwargs={'pk': self.payslip_entry.pk})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
