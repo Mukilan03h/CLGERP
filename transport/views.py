@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Vehicle, Route, TransportAllocation
 from .serializers import VehicleSerializer, RouteSerializer, TransportAllocationSerializer
-from .permissions import IsAdminUser, IsStudentOwner
+from .permissions import IsAdminOrReadOnly
 
 class VehicleViewSet(viewsets.ModelViewSet):
     """
@@ -10,12 +10,7 @@ class VehicleViewSet(viewsets.ModelViewSet):
     """
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class RouteViewSet(viewsets.ModelViewSet):
     """
@@ -23,12 +18,7 @@ class RouteViewSet(viewsets.ModelViewSet):
     """
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class TransportAllocationViewSet(viewsets.ModelViewSet):
     """
@@ -36,17 +26,12 @@ class TransportAllocationViewSet(viewsets.ModelViewSet):
     """
     queryset = TransportAllocation.objects.all()
     serializer_class = TransportAllocationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'Student':
+        if user.role == 'Admin':
+            return TransportAllocation.objects.all()
+        elif user.role == 'Student':
             return TransportAllocation.objects.filter(student__user=user)
-        return TransportAllocation.objects.all()
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        elif self.action == 'retrieve':
-            self.permission_classes = [IsAdminUser | IsStudentOwner]
-        return super().get_permissions()
+        return TransportAllocation.objects.none()

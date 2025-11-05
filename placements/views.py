@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 from .models import Company, Job, Application
 from .serializers import CompanySerializer, JobSerializer, ApplicationSerializer
-from .permissions import IsAdminOrReadOnly, IsStudentOwnerOrAdmin
+from .permissions import IsAdminOrReadOnly, IsStudentOwner
 
 class CompanyViewSet(viewsets.ModelViewSet):
     """
@@ -9,7 +9,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     """
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
 
 class JobViewSet(viewsets.ModelViewSet):
     """
@@ -17,7 +17,7 @@ class JobViewSet(viewsets.ModelViewSet):
     """
     queryset = Job.objects.all()
     serializer_class = JobSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
 
 class ApplicationViewSet(viewsets.ModelViewSet):
     """
@@ -47,6 +47,10 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             serializer.save()
 
     def get_permissions(self):
+        if self.request.user.role == 'Admin':
+            return [permissions.IsAuthenticated()]
         if self.action in ['update', 'partial_update', 'destroy', 'retrieve']:
-            self.permission_classes = [IsStudentOwnerOrAdmin]
-        return super().get_permissions()
+            return [permissions.IsAuthenticated(), IsStudentOwner()]
+        elif self.action == 'create':
+            return [permissions.IsAuthenticated()]
+        return [permissions.IsAuthenticated(), IsAdminOrReadOnly()]

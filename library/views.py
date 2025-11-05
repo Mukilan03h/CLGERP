@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Book, BookIssue, Fine
 from .serializers import BookSerializer, BookIssueSerializer, FineSerializer
-from .permissions import IsAdminUser, IsStudentOwner
+from .permissions import IsAdminOrReadOnly, IsStudentOwner
 
 class BookViewSet(viewsets.ModelViewSet):
     """
@@ -10,12 +10,7 @@ class BookViewSet(viewsets.ModelViewSet):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class BookIssueViewSet(viewsets.ModelViewSet):
     """
@@ -23,19 +18,19 @@ class BookIssueViewSet(viewsets.ModelViewSet):
     """
     queryset = BookIssue.objects.all()
     serializer_class = BookIssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'Student':
+        if user.role == 'Admin':
+            return BookIssue.objects.all()
+        elif user.role == 'Student':
             return BookIssue.objects.filter(student__user=user)
-        return BookIssue.objects.all()
+        return BookIssue.objects.none()
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        elif self.action == 'retrieve':
-            self.permission_classes = [IsAdminUser | IsStudentOwner]
+        if self.action == 'retrieve':
+            self.permission_classes = [IsAuthenticated, IsStudentOwner]
         return super().get_permissions()
 
 class FineViewSet(viewsets.ModelViewSet):
@@ -44,17 +39,17 @@ class FineViewSet(viewsets.ModelViewSet):
     """
     queryset = Fine.objects.all()
     serializer_class = FineSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'Student':
+        if user.role == 'Admin':
+            return Fine.objects.all()
+        elif user.role == 'Student':
             return Fine.objects.filter(book_issue__student__user=user)
-        return Fine.objects.all()
+        return Fine.objects.none()
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAdminUser]
-        elif self.action == 'retrieve':
-            self.permission_classes = [IsAdminUser | IsStudentOwner]
+        if self.action == 'retrieve':
+            self.permission_classes = [IsAuthenticated, IsStudentOwner]
         return super().get_permissions()

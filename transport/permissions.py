@@ -1,15 +1,10 @@
 from rest_framework import permissions
 
-class IsAdminUser(permissions.BasePermission):
+class IsAdminOrReadOnly(permissions.BasePermission):
     """
-    Allows access only to admin users.
+    Custom permission to only allow admins to edit objects.
     """
     def has_permission(self, request, view):
-        return request.user and request.user.is_authenticated and request.user.role == 'Admin'
-
-class IsStudentOwner(permissions.BasePermission):
-    """
-    Allows access only to the student who owns the object.
-    """
-    def has_object_permission(self, request, view, obj):
-        return obj.student.user == request.user
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user.role == 'Admin'

@@ -1,19 +1,17 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework import permissions
 
-class IsAdminOrReadOnly(BasePermission):
+class IsAdminOrReadOnly(permissions.BasePermission):
     """
-    Allows safe methods for any authenticated user, but only admins for write methods.
+    Custom permission to only allow admins to edit objects.
     """
     def has_permission(self, request, view):
-        if request.method in SAFE_METHODS:
-            return request.user and request.user.is_authenticated
-        return request.user and request.user.is_authenticated and request.user.role == 'Admin'
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user.role == 'Admin'
 
-class IsStudentOwnerOrAdmin(BasePermission):
+class IsStudentOwner(permissions.BasePermission):
     """
-    Allows access only to the student who owns the application or an admin.
+    Custom permission to only allow student owners of an object to view it.
     """
     def has_object_permission(self, request, view, obj):
-        if request.user.role == 'Admin':
-            return True
         return obj.student.user == request.user
