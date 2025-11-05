@@ -11,3 +11,4 @@ pytest-django
 django-cors-headers
 black
 isort
+mongoengine

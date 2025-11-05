@@ -299,52 +299,6 @@ The project follows semantic versioning (vX.Y.Z).
 *   `GET, POST /api/hostel/allocations/`
 *   `GET, PUT, PATCH, DELETE /api/hostel/allocations/{id}/`
 
-### Payroll
-
-*   `GET, POST /api/payroll/salaries/`
-*   `GET, PUT, PATCH, DELETE /api/payroll/salaries/{id}/`
-*   `GET, POST /api/payroll/payslips/`
-*   `GET, PUT, PATCH, DELETE /api/payroll/payslips/{id}/`
-*   `GET, POST /api/payroll/payslip-entries/`
-*   `GET, PUT, PATCH, DELETE /api/payroll/payslip-entries/{id}/`
-
-### Placements
-
-*   `GET, POST /api/placements/companies/`
-*   `GET, PUT, PATCH, DELETE /api/placements/companies/{id}/`
-*   `GET, POST /api/placements/jobs/`
-*   `GET, PUT, PATCH, DELETE /api/placements/jobs/{id}/`
-*   `GET, POST /api/placements/applications/`
-*   `GET, PUT, PATCH, DELETE /api/placements/applications/{id}/`
-
-### Notifications
-
-*   `GET /api/notifications/`
-*   `GET /api/notifications/{id}/`
-*   `POST /api/notifications/{id}/mark_as_read/`
-*   `POST /api/notifications/mark_all_as_read/`
-
-### Documents & Certificates
-
-*   `GET, POST /api/documents/user-documents/`
-*   `GET, PUT, PATCH, DELETE /api/documents/user-documents/{id}/`
-*   `POST /api/documents/user-documents/{id}/verify/`
-*   `POST /api/documents/user-documents/{id}/reject/`
-*   `GET, POST /api/documents/certificates/`
-*   `GET, PUT, PATCH, DELETE /api/documents/certificates/{id}/`
-
-### Accounting
-
-*   `GET, POST /api/accounting/ledgers/`
-*   `GET, PUT, PATCH, DELETE /api/accounting/ledgers/{id}/`
-*   `GET, POST /api/accounting/transactions/`
-*   `GET, PUT, PATCH, DELETE /api/accounting/transactions/{id}/`
-
-### Audit Trail
-
-*   `GET /api/audit/`
-*   `GET /api/audit/{id}/`
-
 ---
 
 This README provides a comprehensive overview of the College ERP backend project. For more details, please refer to the API documentation and the source code.
