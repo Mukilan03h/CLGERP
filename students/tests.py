@@ -56,3 +56,20 @@ class StudentPermissionsTests(APITestCase):
         data = {'name': 'New Student', 'roll_no': '789', 'department': self.department.id, 'semester': 1, 'guardian_info': 'New Guardian'}
         response = self.client.post(reverse('student-list'), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_student_with_duplicate_roll_no(self):
+        self.client.force_authenticate(user=self.admin_user)
+        data = {'name': 'New Student', 'roll_no': '123', 'department': self.department.id, 'semester': 1, 'guardian_info': 'New Guardian'}
+        response = self.client.post(reverse('student-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_cannot_update_other_student_profile(self):
+        self.client.force_authenticate(user=self.student_user)
+        data = {'name': 'Updated Name'}
+        response = self.client.patch(reverse('student-detail', kwargs={'pk': self.other_student.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_student_cannot_delete_other_student_profile(self):
+        self.client.force_authenticate(user=self.student_user)
+        response = self.client.delete(reverse('student-detail', kwargs={'pk': self.other_student.pk}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

@@ -64,3 +64,15 @@ class AttendancePermissionsTests(APITestCase):
         data = {'student': self.student.id, 'subject': other_subject.id, 'date': datetime.date.today(), 'status': 'absent'}
         response = self.client.post(reverse('attendance-list'), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_attendance_with_invalid_status(self):
+        self.client.force_authenticate(user=self.faculty_user)
+        data = {'student': self.student.id, 'subject': self.subject.id, 'date': datetime.date.today(), 'status': 'invalid'}
+        response = self.client.post(reverse('attendance-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_cannot_update_attendance(self):
+        self.client.force_authenticate(user=self.student_user)
+        data = {'status': 'absent'}
+        response = self.client.patch(reverse('attendance-detail', kwargs={'pk': self.attendance.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

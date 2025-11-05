@@ -62,3 +62,14 @@ class TimetablePermissionsTests(APITestCase):
         data = {'department': self.department.id, 'semester': 1, 'subject': self.subject.id, 'faculty': self.faculty.id, 'classroom': self.classroom.id, 'timeslot': self.timeslot.id}
         response = self.client.post(reverse('timetable-list'), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_cannot_update_timetable(self):
+        self.client.force_authenticate(user=self.student_user)
+        data = {'semester': 2}
+        response = self.client.patch(reverse('timetable-detail', kwargs={'pk': self.timetable.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_cannot_delete_timetable(self):
+        self.client.force_authenticate(user=self.student_user)
+        response = self.client.delete(reverse('timetable-detail', kwargs={'pk': self.timetable.pk}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

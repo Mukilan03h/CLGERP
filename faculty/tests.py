@@ -69,3 +69,14 @@ class FacultyPermissionsTests(APITestCase):
         response = self.client.get(reverse('leaverequest-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
+
+    def test_faculty_cannot_update_other_faculty_profile(self):
+        self.client.force_authenticate(user=self.faculty_user)
+        data = {'name': 'Updated Name'}
+        response = self.client.patch(reverse('faculty-detail', kwargs={'pk': self.other_faculty.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_faculty_cannot_delete_other_faculty_profile(self):
+        self.client.force_authenticate(user=self.faculty_user)
+        response = self.client.delete(reverse('faculty-detail', kwargs={'pk': self.other_faculty.pk}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

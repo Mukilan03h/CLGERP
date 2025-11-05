@@ -90,3 +90,15 @@ class ExaminationPermissionsTests(APITestCase):
         data = {'name': 'Final Exam', 'date': '2024-05-01', 'subjects': [self.subject1.id]}
         response = self.client.post(reverse('exam-list'), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_marks_with_invalid_marks(self):
+        self.client.force_authenticate(user=self.faculty_user)
+        data = {'exam': self.exam.id, 'student': self.student.id, 'subject': self.subject1.id, 'marks': 101}
+        response = self.client.post(reverse('marks-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_cannot_update_marks(self):
+        self.client.force_authenticate(user=self.student_user)
+        data = {'marks': 90}
+        response = self.client.patch(reverse('marks-detail', kwargs={'pk': self.marks.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

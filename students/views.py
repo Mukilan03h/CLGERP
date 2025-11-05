@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from .models import Student
 from .serializers import StudentSerializer
-from .permissions import IsAdminOrReadOnly, IsOwnerOrAdmin
+from .permissions import IsAdminOrReadOnly, IsOwner
 from rest_framework.permissions import IsAuthenticated
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated, IsAdminOrReadOnly, IsOwnerOrAdmin]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
@@ -19,5 +19,9 @@ class StudentViewSet(viewsets.ModelViewSet):
             return Student.objects.filter(user=user)
         return Student.objects.none()
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get_permissions(self):
+        if self.request.user.role == 'Admin':
+            return [IsAuthenticated()]
+        if self.action in ['update', 'partial_update', 'destroy', 'retrieve']:
+            self.permission_classes = [IsAuthenticated, IsOwner]
+        return super().get_permissions()
