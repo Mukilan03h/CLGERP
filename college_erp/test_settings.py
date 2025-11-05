@@ -1,7 +1,4 @@
 from .settings import *
-import mongoengine
-
-mongoengine.disconnect()
 
 DATABASES = {
     'default': {

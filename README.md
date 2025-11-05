@@ -94,17 +94,21 @@ Below is a simplified text-based ERD of the core modules:
 *   **Examination Management:** Marks, grading, and result generation.
 *   **Timetable & Scheduling:** Class scheduling, faculty allocation, and timetable generation.
 *   **Hostel Management:** Room allocation, mess management, and hostel attendance.
-
-### Future Roadmap
-
 *   **Library Management:** Book issuance, returns, and catalog management.
 *   **Transport Management:** Bus routes, student transport records, and fee management.
 *   **Placement & Internship Cell:** Company listings, student applications, and placement tracking.
 *   **Inventory & Assets Management:** College asset tracking and inventory management.
+*   **Payroll Management:** Salary processing, payslip generation, and benefits administration.
 *   **Notifications System:** Email, SMS, and in-app notifications.
 *   **Document Verification & Certificates:** Generation of bonafide certificates, transfer certificates, and marksheets.
 *   **Accounting Ledger & Reports:** Financial accounting, ledger management, and report generation.
 *   **Audit Trail & Activity Logs:** Logging user activities for security and auditing purposes.
+
+### Future Roadmap
+
+*   **Admissions Management:** Handling the entire student admission process, from application to enrollment.
+*   **Attendance Tracking:** Recording and managing student and faculty attendance.
+*   **Finance & Fee Management:** Fee collection, expense tracking, and financial reporting.
 
 ## 4. JWT Refresh Flow + RBAC Middleware Explanation
 
