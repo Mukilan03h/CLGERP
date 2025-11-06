@@ -1,14 +1,8 @@
 from django.db import models
 from students.models import Student
+from workflow.models import Workflow, Stage
 
 class Application(models.Model):
-    STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('reviewed', 'Reviewed'),
-        ('accepted', 'Accepted'),
-        ('rejected', 'Rejected'),
-    )
-
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -16,8 +10,11 @@ class Application(models.Model):
     date_of_birth = models.DateField()
     address = models.TextField()
     previous_education = models.TextField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     application_date = models.DateTimeField(auto_now_add=True)
+
+    # Workflow integration
+    workflow = models.ForeignKey(Workflow, on_delete=models.SET_NULL, null=True, blank=True, related_name='applications')
+    current_stage = models.ForeignKey(Stage, on_delete=models.SET_NULL, null=True, blank=True, related_name='applications')
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

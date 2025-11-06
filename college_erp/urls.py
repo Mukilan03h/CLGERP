@@ -38,5 +38,6 @@ urlpatterns = [
     path('api/payroll/', include('payroll.urls')),
     path('api/placements/', include('placements.urls')),
     path('api/notifications/', include('notifications.urls')),
+    path('api/workflow/', include('workflow.urls')),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
