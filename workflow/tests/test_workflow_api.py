@@ -48,3 +48,24 @@ class TestWorkflowAPI:
         response = self.client.delete(self.workflow_detail_url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Workflow.objects.count() == 0
+
+
+@pytest.mark.django_db
+class TestStageAPI:
+    def setup_method(self):
+        self.client = APIClient()
+        self.admin_user = User.objects.create_user(username='admin', password='password', role='Admin')
+        self.workflow = Workflow.objects.create(name='Test Workflow')
+        self.stage_url = reverse('stage-list')
+
+    def test_admin_can_create_stage_with_is_final(self):
+        self.client.force_authenticate(user=self.admin_user)
+        data = {
+            'workflow': self.workflow.pk,
+            'name': 'Approved',
+            'order': 1,
+            'is_final': True
+        }
+        response = self.client.post(self.stage_url, data)
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data['is_final'] is True

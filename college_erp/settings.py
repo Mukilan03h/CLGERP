@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'payroll',
     'placements',
     'notifications',
+    'workflow',
 ]
 
 MIDDLEWARE = [

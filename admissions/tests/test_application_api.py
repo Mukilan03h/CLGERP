@@ -1,10 +1,12 @@
 import pytest
 from django.urls import reverse
+from django.core import mail
 from rest_framework import status
 from rest_framework.test import APIClient
 from auth_app.models import User
 from admissions.models import Application
 from workflow.models import Workflow, Stage, Transition
+from notifications.models import Notification
 
 @pytest.mark.django_db
 class TestApplicationTransitionAPI:
@@ -20,7 +22,7 @@ class TestApplicationTransitionAPI:
         self.workflow = Workflow.objects.create(name='Admission Workflow')
         self.stage1 = Stage.objects.create(workflow=self.workflow, name='Pending', order=1)
         self.stage2 = Stage.objects.create(workflow=self.workflow, name='Reviewed', order=2)
-        self.stage3 = Stage.objects.create(workflow=self.workflow, name='Approved', order=3)
+        self.stage3 = Stage.objects.create(workflow=self.workflow, name='Approved', order=3, is_final=True)
 
         # Transitions
         self.transition1 = Transition.objects.create(workflow=self.workflow, from_stage=self.stage1, to_stage=self.stage2, role='AdmissionOfficer')
@@ -89,3 +91,31 @@ class TestApplicationTransitionAPI:
         data = {'to_stage': self.stage2.pk}
         response = self.client.post(self.transition_url, data)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_staff_is_notified_on_transition(self):
+        self.client.force_authenticate(user=self.officer_user)
+        data = {'to_stage': self.stage2.pk}
+        response = self.client.post(self.transition_url, data)
+
+        assert response.status_code == status.HTTP_200_OK
+        # The next transition is from stage2 to stage3, which requires an Admin
+        assert Notification.objects.filter(recipient=self.admin_user).exists() is True
+        notification = Notification.objects.get(recipient=self.admin_user)
+        assert "requires action" in notification.message
+
+    def test_applicant_is_emailed_on_final_stage(self):
+        # First, move the application to stage 2
+        self.application.current_stage = self.stage2
+        self.application.save()
+
+        # Now, transition to the final stage (stage 3)
+        self.client.force_authenticate(user=self.admin_user)
+        final_transition_url = reverse('admission-application-transition', kwargs={'pk': self.application.pk})
+        data = {'to_stage': self.stage3.pk}
+        response = self.client.post(final_transition_url, data)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert len(mail.outbox) == 1
+        email = mail.outbox[0]
+        assert email.subject == 'Update on your application to College ERP'
+        assert email.to[0] == self.application.email

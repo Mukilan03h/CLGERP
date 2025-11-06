@@ -12,6 +12,7 @@ class Stage(models.Model):
     workflow = models.ForeignKey(Workflow, related_name='stages', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     order = models.IntegerField()
+    is_final = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['order']
